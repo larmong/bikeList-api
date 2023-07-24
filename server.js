@@ -1,13 +1,12 @@
-import { ApolloServer, gql } from "apollo-server";
-import cors from "cors";
-import fetch from "node-fetch";
+import {ApolloServer, gql} from "apollo-server";
+import fetch from "node-fetch"
 
 const typeDefs = gql`
     # Query
     type Query {
-        allBikeList: [BikeList!]!
+        allBikeList: [bikeList!]!
     }
-    type BikeList {
+    type bikeList {
         rackTotCnt: String!
         stationName: String!
         parkingBikeTotCnt: String!
@@ -16,50 +15,29 @@ const typeDefs = gql`
         stationLongitude: String!
         stationId: String!
     }
-`;
+`
 
 const resolvers = {
     Query: {
-        allBikeList() {
+        allBikeList(){
             return fetch("http://openapi.seoul.go.kr:8088/77447a58706c617237364d6a694774/json/bikeList/1/1000/")
               .then((res) => res.json())
               .then((json) => json.rentBikeStatus.row);
         },
     },
-};
 
-const app = express();
-
-// CORS 설정
-const allowedOrigins = [
-    "https://bike-finder-app-56767ec70f0a.herokuapp.com",
-    "https://bike-finder-larmong.netlify.app",
-    "https://your-playground-domain.com",
-    "http://localhost:3000",
-];
-app.use(
-  cors({
-      origin: function (origin, callback) {
-          if (!origin || allowedOrigins.includes(origin)) {
-              callback(null, true);
-          } else {
-              callback(new Error("Not allowed by CORS"));
-          }
-      },
-      credentials: true,
-  })
-);
+}
 
 const server = new ApolloServer({
     typeDefs,
     resolvers,
     introspection: true,
     playground: true,
+    cors: {
+        origin: "https://bike-finder-app-56767ec70f0a.herokuapp.com",
+    }
 });
 
-server.applyMiddleware({ app });
-
-const port = process.env.PORT || 4000;
-app.listen(port, () => {
-    console.log(`🚀 Server ready at http://localhost:${port}${server.graphqlPath}`);
+server.listen({ port: process.env.PORT || 4000 }).then(({ url }) => {
+    console.log(`🚀 Server ready at ${url}`);
 });
