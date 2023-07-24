@@ -1,12 +1,12 @@
 import {ApolloServer, gql} from "apollo-server";
-import fetch from "node-fetch"
+import fetch from "node-fetch";
 
 const typeDefs = gql`
     # Query
     type Query {
-        allBikeList: [bikeList!]!
+        allStations: [Station!]!
     }
-    type bikeList {
+    type Station {
         rackTotCnt: String!
         stationName: String!
         parkingBikeTotCnt: String!
@@ -19,7 +19,7 @@ const typeDefs = gql`
 
 const resolvers = {
     Query: {
-        allBikeList(){
+        allStations(){
             return fetch("http://openapi.seoul.go.kr:8088/77447a58706c617237364d6a694774/json/bikeList/1/1000/")
               .then((res) => res.json())
               .then((json) => json.rentBikeStatus.row);
@@ -28,15 +28,7 @@ const resolvers = {
 
 }
 
-const server = new ApolloServer({
-    typeDefs,
-    resolvers,
-    introspection: true,
-    playground: true,
-    cors: {
-        origin: "https://bike-finder-app-56767ec70f0a.herokuapp.com",
-    }
-});
+const server = new ApolloServer({ typeDefs, resolvers });
 
 server.listen({ port: process.env.PORT || 4000 }).then(({ url }) => {
     console.log(`🚀 Server ready at ${url}`);
