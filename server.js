@@ -21,7 +21,7 @@ const resolvers = {
     Query: {
         async allBikeList() {
             try {
-                const apiUrl = "http://openapi.seoul.go.kr:8088/77447a58706c617237364d6a694774/json/bikeList/1/1000/";
+                const apiUrl = "http://openapi.seoul.go.kr:8088/77447a58706c617237364d6a694774/json/bikeList/1/10/";
                 const proxyOptions = {
                     method: "GET",
                     headers: {
