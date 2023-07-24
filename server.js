@@ -32,7 +32,10 @@ const server = new ApolloServer({
     typeDefs,
     resolvers,
     introspection: true,
-    playground: true
+    playground: true,
+    cors: {
+        origin: "https://bike-finder-app-56767ec70f0a.herokuapp.com",
+    }
 });
 
 server.listen({ port: process.env.PORT || 4000 }).then(({ url }) => {
