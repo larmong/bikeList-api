@@ -31,8 +31,8 @@ const resolvers = {
 const server = new ApolloServer({
     typeDefs,
     resolvers,
-    introspection: true,
-    playground: true,
+    // introspection: true,
+    // playground: true,
     cors: {
         origin: "https://bike-finder-app-56767ec70f0a.herokuapp.com",
     }
